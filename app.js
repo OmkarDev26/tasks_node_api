@@ -3,7 +3,11 @@ const apis = require("./config/config");
 
 const app = express();
 
-const PORT = 8000;
+let PORT = process.env.PORT;
+
+if (PORT == null || PORT == "") {
+  PORT = 8000;
+}
 
 // apis.app.use("/", (req, res) => res.send("Hi from new API"));
 
