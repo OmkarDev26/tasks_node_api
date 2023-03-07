@@ -9,7 +9,7 @@ if (PORT == null || PORT == "") {
   PORT = 8000;
 }
 
-// apis.app.use("/", (req, res) => res.send("Hi from new API"));
+apis.app.use("/check", (req, res) => res.send("Hi from new API"));
 
 apis.app.listen(PORT, () => {
   console.log(`Server started at port: ${PORT}`);
