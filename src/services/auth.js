@@ -19,10 +19,10 @@ userAuthServices.register = (params) => {
         hashedPassword = await argon2.hash(params.password, { salt });
       }
 
-      user = await usersModel().find({
+      user = await usersModel().findOne({
         email: params.email.toLowerCase(),
       });
-      if (user.length) {
+      if (user) {
         resolve("User with email already exists");
       } else {
         user = await usersModel().create({
@@ -119,7 +119,7 @@ userAuthServices.login = (params) => {
 
         data = await usersModel().updateOne(
           { _id: user._id },
-          { token: access_token, tokenCreatedAt: Date.now() }
+          { token: access_token, tokenCreatedAt: new Date().toString() }
         );
         resolve("User Logged In!");
       } else {
