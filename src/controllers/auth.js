@@ -24,4 +24,26 @@ userAuthController.findUser = (params) => {
   });
 };
 
+userAuthController.login = (params) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const data = await userAuthServices.login(params);
+      resolve(data);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+userAuthController.verify = (params) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const data = await userAuthServices.verify(params);
+      resolve(data);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
 module.exports = userAuthController;
