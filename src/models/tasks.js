@@ -4,7 +4,7 @@ const tasksSchema = mongoose.Schema(
   {
     user: { type: mongoose.Types.ObjectId },
     taskName: { type: String },
-    taskDate: { type: Date },
+    taskDate: { type: String },
     taskStatus: {
       type: String,
       enum: ["Completed", "Incomplete"],

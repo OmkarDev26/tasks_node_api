@@ -31,8 +31,8 @@ tasksServices.get = (params) => {
       resolve({
         totalTasks,
         tasks,
-        pages: totalTasks / perPage,
-        currentPage: page,
+        pages: Math.ceil(totalTasks / perPage),
+        currentPage: params.page,
       });
     } catch (error) {
       reject(error);
@@ -43,11 +43,13 @@ tasksServices.get = (params) => {
 tasksServices.create = (params) => {
   return new Promise(async (resolve, reject) => {
     try {
+      const d = new Date(params.taskDate);
       const task = await tasksModel().create({
         user: params.userId,
         taskName: params.taskName,
-        taskDate: params.taskDate,
+        taskDate: `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`,
       });
+
       resolve(task);
     } catch (error) {
       reject(error);

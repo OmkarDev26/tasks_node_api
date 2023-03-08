@@ -25,26 +25,9 @@ userAuthServices.register = (params) => {
       if (user) {
         resolve("User with email already exists");
       } else {
-        user = await usersModel().create({
-          email: params.email.trim(),
-          password: hashedPassword,
-        });
+        otp = generateOTP(1000, 9999); //generate 4 digit OTP
 
-        otp = generateOTP(1000, 9999);
-
-        await otpModel().findOneAndUpdate(
-          {
-            email: params.email,
-          },
-          {
-            otp: otp,
-            $inc: { attempts: 1 },
-          },
-          {
-            upsert: true,
-          }
-        );
-
+        //send email through nodemailer
         const output = `
       <div style="font-family: Helvetica,Arial,sans-serif;">
   <div style="margin:50px auto;width:70%;padding:20px 0">
@@ -75,14 +58,32 @@ userAuthServices.register = (params) => {
           html: output, // html body
         };
 
-        transporter.sendMail(mailOptions, (error, info) => {
+        transporter.sendMail(mailOptions, async (error, info) => {
           if (error) {
-            return console.log(error);
+            reject(error);
+          }
+          if (info) {
+            user = await usersModel().create({
+              email: params.email.trim(),
+              password: hashedPassword,
+            });
+
+            await otpModel().findOneAndUpdate(
+              {
+                email: params.email,
+              },
+              {
+                otp: otp,
+                $inc: { attempts: 1 },
+              },
+              {
+                upsert: true,
+              }
+            );
           }
           console.log("Message sent: %s", info.messageId);
+          resolve("OTP sent on email for verification");
         });
-
-        resolve("OTP sent on email for verification");
       }
     } catch (error) {
       reject(error);
