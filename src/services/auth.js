@@ -121,11 +121,13 @@ userAuthServices.login = (params) => {
             expiresIn: "5m",
           });
 
-          data = await usersModel().updateOne(
-            { _id: user._id },
-            { token: access_token, tokenCreatedAt: new Date().toString() }
-          );
-          resolve("User Logged In!");
+          data = await usersModel()
+            .findOneAndUpdate(
+              { _id: user._id },
+              { token: access_token, tokenCreatedAt: new Date().toString() }
+            )
+            .select({ _id: 1, email: 1 });
+          resolve({ user: data, msg: "User Logged In!" });
         } else {
           resolve("Please check your credentials");
         }
