@@ -91,4 +91,31 @@ tasksServices.delete = (params) => {
   });
 };
 
+tasksServices.reArrange = (params) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const taskIDs = params.tasks
+        .map((x) => {
+          return x._id;
+        })
+        .sort();
+
+      const tasks = params.tasks.map((x, index) => {
+        return {
+          ...x,
+          _id: taskIDs[index],
+        };
+      });
+
+      for (let i = 0; i < tasks.length; i++) {
+        const element = tasks[i];
+        await tasksModel().updateOne({ _id: element._id }, element);
+      }
+      resolve("Task Rearranged");
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
 module.exports = tasksServices;

@@ -45,4 +45,15 @@ tasksController.delete = (params) => {
   });
 };
 
+tasksController.reArrange = (params) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const data = await tasksServices.reArrange(params);
+      resolve(data);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
 module.exports = tasksController;

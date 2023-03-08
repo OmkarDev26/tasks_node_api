@@ -109,20 +109,26 @@ userAuthServices.login = (params) => {
   return new Promise(async (resolve, reject) => {
     try {
       let data;
+      let passwordCheck;
       const user = await usersModel().findOne({
         email: params.email,
         verified: true,
       });
       if (user) {
-        const access_token = jwt.sign({ user: user._id }, "newSecretCheck", {
-          expiresIn: "5m",
-        });
+        passwordCheck = await argon2.verify(user.password, params.password);
+        if (passwordCheck) {
+          const access_token = jwt.sign({ user: user._id }, "newSecretCheck", {
+            expiresIn: "5m",
+          });
 
-        data = await usersModel().updateOne(
-          { _id: user._id },
-          { token: access_token, tokenCreatedAt: new Date().toString() }
-        );
-        resolve("User Logged In!");
+          data = await usersModel().updateOne(
+            { _id: user._id },
+            { token: access_token, tokenCreatedAt: new Date().toString() }
+          );
+          resolve("User Logged In!");
+        } else {
+          resolve("Please check your credentials");
+        }
       } else {
         resolve("User not found");
       }

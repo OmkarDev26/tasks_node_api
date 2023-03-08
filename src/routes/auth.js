@@ -1,7 +1,6 @@
 const express = require("express");
 
 const router = express.Router();
-const authCheckMiddleware = require("../helper/authCheck");
 const userAuthController = require("../controllers/auth");
 
 router.post("/register", async (req, res, next) => {
@@ -18,7 +17,7 @@ router.post("/register", async (req, res, next) => {
   }
 });
 
-router.post("/findUser", authCheckMiddleware, async (req, res, next) => {
+router.post("/findUser", async (req, res, next) => {
   try {
     const payload = {
       ...req.body,
