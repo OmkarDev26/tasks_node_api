@@ -56,4 +56,17 @@ router.post("/delete", validatedUser, async (req, res, next) => {
   }
 });
 
+router.post("/reArrange", validatedUser, async (req, res, next) => {
+  try {
+    const payload = {
+      ...req.body,
+    };
+    const data = await tasksController.reArrange(payload);
+    res.success.success("Request Acknowledge", data);
+  } catch (error) {
+    next(error);
+    console.log(error);
+  }
+});
+
 module.exports = router;
