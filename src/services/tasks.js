@@ -48,6 +48,7 @@ tasksServices.create = (params) => {
         user: params.userId,
         taskName: params.taskName,
         taskDate: `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`,
+        taskStatus: params.taskStatus,
       });
 
       resolve(task);

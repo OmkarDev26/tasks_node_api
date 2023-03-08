@@ -2,9 +2,9 @@
   "name": "tasks-api",
   "version": "1.0.0",
   "description": "Creating task, sorting them and updating tasks as well.",
-  "main": "nodemon app.js",
+  "main": "node app.js",
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack"
   },
